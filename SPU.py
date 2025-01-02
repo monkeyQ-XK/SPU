@@ -9,7 +9,7 @@ from streamlit_option_menu import option_menu
 from puss import single_reaction_bool
 from puss import prepolymer_reaction
 from puss import prepolymer_reaction_bools
-import input
+
 #from mysql.connector import Error
 import matplotlib.pyplot as plt
 import io
