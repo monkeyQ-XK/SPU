@@ -738,12 +738,12 @@ def download_page():
             st.session_state.current_page = new_page
 
     # 提供CSV下载
-    csv = df.to_csv(index=False)
-    st.download_button(
-        label="Download Data",
-        data=csv,
-        file_name='data.csv',
-        mime='text/csv')
+   # csv = df.to_csv(index=False)
+    #st.download_button(
+        #label="Download Data",
+        #data=csv,
+        #file_name='data.csv',
+        #mime='text/csv')
 
     # 添加数据部分
     with st.container():
@@ -752,34 +752,62 @@ def download_page():
             st.title('Add Data to Database')
             data = []
             columns = [
-                "polyol", "Diisocyanate", "extender1", "extender2", "polymer_unit", "prepolymer",
+                "polyol", "Diisocyanate", "extender1", "extender2",
                 "extender1append", "extender2append", "polyol_MW", "dimw", "piece_mw", "pre_mw",
                 "ex1_mw", "ex2_mw", "polyol_ratio", "Diisocyanate_ratio", "extender1_ratio",
                 "extender2_ratio", "Hs_wt", "R", "mac_rate", "Ym", "Ts", "Eb", "Th", "break_ratio",
                 "self_tem", "self_time", "E1", "E2"
             ]
 
-            # 创建3行，每行10个输入框
-            for i in range(0, len(columns), 10):
-                row = st.columns(10)
-                for j, col in enumerate(columns[i:i + 10]):
+            # Create 3 rows, each with 10 input boxes
+            for i in range(0, len(columns), 5):
+                row = st.columns(5)
+                for j, col in enumerate(columns[i:i + 5]):
                     input_value = row[j].text_input(f'{col}')
                     data.append(input_value)
 
-            # 当用户点击按钮时
+            # When the user clicks the button
             if st.button('Add Data'):
-                # 连接到数据库
-                db = pymysql.connect(host='127.0.0.1', user='root', passwd='123456', port=3306, db='pu')
-                sql =('polyol', 'Diisocyanate', 'extender1', 'extender2', 'polymer_unit', 'prepolymer',
-                        'extender1append', 'extender2append', 'polyol_MW', 'dimw', 'piece_mw', 'pre_mw',
-                        'ex1_mw', 'ex2_mw', 'polyol_ratio', 'Diisocyanate_ratio', 'extender1_ratio',
-                        'extender2_ratio', 'Hs_wt', 'R', 'mac_rate', 'Ym', 'Ts', 'Eb', 'Th','break_ratio',
-                        'self_tem', 'self_time', 'E1', 'E2')
-                cursor = db.cursor()
-                cursor.execute(sql, tuple(data))
-                db.commit()
-                db.close()
-                st.success('Data added successfully!')
+                try:
+                    # Connect to the database
+                    db = pymysql.connect(host='127.0.0.1', user='root', passwd='123456', port=3306, db='pu')
+                    cursor = db.cursor()
+
+                    # Construct the SQL INSERT statement
+                    sql = f"""
+                        INSERT INTO data (
+                            polyol, Diisocyanate, extender1, extender2, 
+                            extender1append, extender2append, polyol_MW, dimw, piece_mw, pre_mw,
+                            ex1_mw, ex2_mw, polyol_ratio, Diisocyanate_ratio, extender1_ratio,
+                            extender2_ratio, Hs_wt, R, mac_rate, Ym, Ts, Eb, Th, break_ratio,
+                            self_tem, self_time, E1, E2
+                        ) VALUES (
+                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
+                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
+                            %s, %s  , %s
+                        )
+                    """
+
+                    # Execute the SQL query with the data as parameters
+                    cursor.execute(sql, (data[0], data[1], data[2], data[3], data[4], data[5],
+                                         float(data[6]), float(data[7]), float(data[8]), float(data[9]),
+                                         float(data[10]), float(data[11]), float(data[12]), float(data[13]),
+                                         float(data[14]), float(data[15]), float(data[16]), float(data[17]),
+                                         float(data[18]), float(data[19]), float(data[20]), float(data[21]),
+                                         float(data[22]), float(data[23]), float(data[24]), float(data[25]),
+                                         float(data[26]), float(data[27])))
+
+                    # Commit the changes to the database
+                    db.commit()
+
+                    # Close the database connection
+                    db.close()
+
+                    # Show success message
+                    st.success('Data added successfully!')
+                except Exception as e:
+                    # If there's an error, show an error message
+                    st.error(f'Error occurred: {e}')
 
 
 def contact_page():
@@ -811,7 +839,7 @@ PASSWORD = "password"
 USERNAME = "admin"
 PASSWORD = "password"
 
-def login_page():
+#def login_page():
     #image_path = 'a.png'  # 替换为你的图片文件路径
 
 
@@ -821,18 +849,18 @@ def login_page():
     #st.image(image_path, use_column_width=True)
 
     # 创建一个登录表单
-    with st.form("login_form"):
-        st.write("登录到自修复聚氨酯数据库")
-        username = st.text_input("用户名")
-        password = st.text_input("密码", type="password")
-        submit_button = st.form_submit_button(label='用户登录')
+    #with st.form("login_form"):
+       # st.write("登录到自修复聚氨酯数据库")
+       # username = st.text_input("用户名")
+       # password = st.text_input("密码", type="password")
+       # submit_button = st.form_submit_button(label='用户登录')
     # 登录逻辑
-        if submit_button:
-            if username == USERNAME and password == PASSWORD:
-                st.success("登录成功！")
-                st.session_state['logged_in'] = True  # 设置登录状态
-            else:
-                st.error("用户名或密码错误。", className="error-message")
+       # if submit_button:
+        #    if username == USERNAME and password == PASSWORD:
+       #         st.success("登录成功！")
+        #        st.session_state['logged_in'] = True  # 设置登录状态
+         #   else:
+          #      st.error("用户名或密码错误。", className="error-message")
 
 
 # 运行登录页面
@@ -842,25 +870,25 @@ def main():
     #st.set_page_config(page_title='SPU', layout='wide')
 
     # 如果用户未登录，显示登录界面
-    if not st.session_state.get('logged_in', False):
-        login_page()
-    else:
-        st.title(' SPU')
-        #st.write('continue to develop...')
-        selected2 = option_menu(None, ["Home", "Search", "Download", 'Predict', 'Contact'],
-                                icons=['house', 'search', "download", 'robot', 'envelope'],
-                                menu_icon="cast", default_index=0, orientation="horizontal")
+   # if not st.session_state.get('logged_in', False):
+       # login_page()
+  #  else:
+    st.title(' SPU')
+    #st.write('continue to develop...')
+    selected2 = option_menu(None, ["Home", "Search", "Download", 'Predict', 'Contact'],
+                            icons=['house', 'search', "download", 'robot', 'envelope'],
+                            menu_icon="cast", default_index=0, orientation="horizontal")
 
-        if selected2 == "Home":
-            home_page()
-        elif selected2 == "Search":
-            search_page()
-        elif selected2 == "Download":
-            download_page()
-        elif selected2 == "Contact":
-            contact_page()
-        elif selected2 == 'Predict':
-            predict_page()
+    if selected2 == "Home":
+        home_page()
+    elif selected2 == "Search":
+        search_page()
+    elif selected2 == "Download":
+        download_page()
+    elif selected2 == "Contact":
+        contact_page()
+    elif selected2 == 'Predict':
+        predict_page()
 
 
 if __name__ == "__main__":
