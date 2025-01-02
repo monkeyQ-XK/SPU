@@ -17,7 +17,7 @@ import io
 from rdkit import Chem
 from rdkit.Chem import Descriptors
 from rdkit.ML.Descriptors import MoleculeDescriptors
-from rdkit.Chem import Draw
+# from rdkit.Chem import Draw
 def home_page():
     #st.header('SPU ')
     # 这里添加首页的内容
