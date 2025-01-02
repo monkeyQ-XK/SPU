@@ -6,4 +6,4 @@ matplotlib==3.7.2
 seaborn==0.13.0
 rdkit
 streamlit_ketcher
-scikit-learn
+scikit-learn==1.2.0
