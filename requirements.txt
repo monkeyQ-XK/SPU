@@ -8,6 +8,5 @@ rdkit
 streamlit_ketcher
 scikit-learn==1.2.0
 streamlit==1.37.0
-mysqlclient
-SQLAlchemy
-
+mysqlclient==2.1.1
+SQLAlchemy==2.0.19
