@@ -685,7 +685,7 @@ def predict_page():
         a
 def download_page():
     def get_data():
-        db = pymysql.connect(host='127.0.0.1', user='root', passwd='123456', port=3306, db='pu')
+        db = pymysql.connect(host='10.12.37.142', user='root', passwd='135988', port=3306, db='test')
         sql = 'SELECT * FROM data;'
         df = pd.read_sql_query(sql, db)
         db.close()
