@@ -56,7 +56,7 @@ def search_page():
     if search_value:
         # 连接到数据库
         # conn = sqlite3.connect('your_database.db')
-        db = pymysql.connect(host='10.12.37.142', user='root', passwd='135988', port=3306, db='pu')
+        db = pymysql.connect(host='10.12.37.142', user='root', passwd='135988', port=3306, db='test')
         # 根据用户输入的字段值执行查询
         # 假设我们要查找的字段是'column_name'，表是'your_table'
         query = f"SELECT * FROM data WHERE Diisocyanate LIKE '{search_value}'"
